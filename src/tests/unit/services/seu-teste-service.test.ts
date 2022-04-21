@@ -112,21 +112,15 @@ describe('Teste do service', () => {
       expect(newCar).to.equal(jsonResponse)
     });
   });
-
-  describe('Car - função Update', () => {
+    
+  describe('caso de erro de update', () => {
     const id = new Types.ObjectId();
 
-    describe('caso de erro de update', () => {
+    it('deveria retornar um erro', async () => {
+      const result = await carService.update(id.toString(), { ...fusca, color: 'ab' });
+      expect(result).to.be.have.a.property('error');
+    });
 
-      it('deveria retornar um erro', async () => {
-        const result = await carService.update(id.toString(), { ...fusca, color: 'ab' });
-        expect(result).to.be.have.a.property('error');
-      });
-
-    })
   })
-
-
-
 
 });
