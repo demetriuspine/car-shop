@@ -1,27 +1,42 @@
-// template para criação dos testes de cobertura da camada de controller
+import * as sinon from 'sinon';
+import chai from 'chai';
+import chaiHttp = require('chai-http');
+import { Types } from 'mongoose';
+import CarController from '../../../controllers/CarController';
+import { Request, Response } from 'express';
+import { jsonResponse, req, res } from '../mocks';
+
+chai.use(chaiHttp);
 
 
-// import * as sinon from 'sinon';
-// import chai from 'chai';
-// import chaiHttp = require('chai-http');
+const carController = new CarController();
+
+const { expect } = chai;
+
+describe('Teste do controller', () => {
 
 
-// chai.use(chaiHttp);
+  describe("caso de sucesso de create", () => {
+    before(async () => {
+      sinon
+        .stub(carController, 'create')
+        .resolves(res);
+    });
+  
+    after(()=>{
+      (carController.create as sinon.SinonStub).restore();
+    })
 
-// const { expect } = chai;
+    it('deveria retornar o status 201', async () => {
+      const newCar = await carController.create(req, res);
+      expect(newCar.statusCode).to.be.equal(201);
+    });
+  
+    it('deveria retornar um objeto com todas as propriedades', async () => {
+      const newCar = await carController.create(req, res);
+      expect(newCar.json).to.be.equal(jsonResponse);
+    });
+  })
 
-// describe('Sua descrição', () => {
 
-//   before(async () => {
-//     sinon
-//       .stub()
-//       .resolves();
-//   });
-
-//   after(()=>{
-//     ().restore();
-//   })
-
-//   it('', async () => {});
-
-// });
+});
